@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>IIS </title>
+	<!--<link rel="preload" as="script" href="async_script.js" onload="var script = document.createElement('script'); script.src = this.href; document.body.appendChild(script);">-->
+  </head>
+  <body>
+	<!--<script src="./app.js" ></script>-->
+	<script>
+		/*
+		Simulation RequireJs or AMD -> Specification (Asynchronus Module Definition)
+		(async function() {
+			"use strict";
+			const appJs = document.createElement("script");
+
+			appJs.src = "./app.js";
+			appJs.async = true;
+			appJs.type = "text/javascript";
+			appJs.addEventListener("load", function () {
+				console.log(window.sum(3, 4));		
+			});
+			
+			document.body.appendChild(appJs);
+
+			let test1 = 1,
+				test2 = 4,
+				module = {};
+
+			const f = new Function("exports", "exports.sum = function(a, b){return a + b;};");
+			f(module);
+			console.log(module.sum(test1, test2));
+			
+			fetch("./sum.js")
+				.then(response => response.text())
+				.then(text => console.log(text));
+
+			const response = await fetch("./sum.js");
+			console.log(await response.text());
+		}());*/
+
+		//CommonJS
+		(async function () {
+			"use strict";
+
+			async function require (url) {
+				const response = await fetch(url),
+				code = await response.text(),
+				f = new Function("exports", code);
+				
+				let module = {};
+				f(module);
+				return module;
+			}
+
+			let module = await require("./sum.js");
+			console.log(module.sum(2, 4));
+		}());
+	</script>
+  </body>
+</html>
